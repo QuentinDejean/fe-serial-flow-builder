@@ -1,9 +1,12 @@
 # fe-serial-flow-builder
 
-For a given parameter, will execute any task given as parameter.
+It is tricky to next API calls when trying to fetch a bunch of data:
+javascript being asynchronous, it will not wait for the next API call to be made will return a partial result. We eventually need to serialise these API calls.
+The following service allows that: For a given list of entities, it will execute any task given as parameter.
 
-Example below:
+Examples below:
 
+Example where no nested API call is needed, simply loop through another list of entities within the arrayList already given.
 SerialFlowService.serialiseEntityParsing(ArrayList,
 [
 	getFulfilmentBasicInfo,
@@ -13,7 +16,48 @@ SerialFlowService.serialiseEntityParsing(ArrayList,
 		taskList: [
 			getFulfilmentItemsBasicInfo,
 			getFulfilmentItemsQty,
-			initItemOrder,
+			initItemOrder
+		]
+	}
+],
+successHandler);
+
+
+More complicated example where a nested API call is made within the ArrayList
+SerialFlowService.serialiseEntityParsing(ArrayList,
+[
+	getFulfilmentBasicInfo,
+	getFulfilmentActions,
+	{
+		endpoint: ppOrderService.getOrderDetails,
+		root: 'order',
+		params: 'orderId',
+		taskList: [
+			getOrderCustomerNameInfo
+		]
+	}
+]
+successHandler);
+
+
+Final example where several array list / API calls are being made
+SerialFlowService.serialiseEntityParsing(ArrayList,
+[
+	getFulfilmentBasicInfo,
+	getFulfilmentActions,
+	{
+		endpoint: ppOrderService.getOrderDetails,
+		root: 'order',
+		params: 'orderId',
+		taskList: [
+			getOrderCustomerNameInfo,
+			getOrderCustomerContactInfo
+		]
+	},
+	{
+		endpoint: 'items',
+		taskList: [
+			getFulfilmentItemsBasicInfo,
 			{
 				endpoint: ppSkuService.search,
 				root: 'sku',
@@ -21,9 +65,12 @@ SerialFlowService.serialiseEntityParsing(ArrayList,
 				taskList: [
 					getSkuBasicInfo,
 					getSkuAttributes,
-					getSkuReferences]
+					getSkuReferences
+				]
 			}
 		]
 	}
-],
+]
 successHandler);
+
+
