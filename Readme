@@ -4,25 +4,26 @@ For a given parameter, will execute any task given as parameter.
 
 Example below:
 
-SerialFlowService.serialiseEntityParsing(ArrayList, [
-							getFulfilmentBasicInfo,
-							initOrder,
-							{
-								endpoint: 'items',
-								taskList: [
-									getFulfilmentItemsBasicInfo,
-									getFulfilmentItemsQty,
-									initItemOrder,
-									{
-										endpoint: ppSkuService.search,
-										root: 'sku',
-										params: ['skuRef'],
-										taskList: [
-											getSkuBasicInfo,
-											getSkuAttributes,
-											getSkuReferences]
-									}
-								]
-							}
-						],
-						successHandler);
+SerialFlowService.serialiseEntityParsing(ArrayList,
+[
+	getFulfilmentBasicInfo,
+	initOrder,
+	{
+		endpoint: 'items',
+		taskList: [
+			getFulfilmentItemsBasicInfo,
+			getFulfilmentItemsQty,
+			initItemOrder,
+			{
+				endpoint: ppSkuService.search,
+				root: 'sku',
+				params: ['skuRef'],
+				taskList: [
+					getSkuBasicInfo,
+					getSkuAttributes,
+					getSkuReferences]
+			}
+		]
+	}
+],
+successHandler);
