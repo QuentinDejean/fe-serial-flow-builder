@@ -1,0 +1,1 @@
+{  "name": "SerialFlowBuilder",  "version": "0.0.1",  "main": "./serial.flow.builder.js",  "ignore": [    "source",    "spec",    ".bowerrc",    ".gitignore",    ".jshintignore",    ".jshintrc",    "bower.json",    "README.md"  ],  "dependencies": {    "angular": "^1.3.0"  }}
